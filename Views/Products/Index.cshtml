@@ -1,0 +1,52 @@
+@model IEnumerable<MeuErp.Models.Product>
+@{
+    ViewData["Title"] = "Produtos";
+}
+
+<h1>Produtos</h1>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Novo Produto</a>
+</p>
+<table class="table table-striped table-hover mt-3">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.Quantity)</th>
+            <th>Mín/Máx</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            var statusClass = "";
+            var statusText = "Normal";
+            if (item.Quantity < item.MinQuantity) {
+                statusClass = "text-danger fw-bold";
+                statusText = "Abaixo do Mín.";
+            } else if (item.Quantity > item.MaxQuantity) {
+                statusClass = "text-warning fw-bold";
+                statusText = "Acima do Máx.";
+            }
+
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                <td>@item.MinQuantity / @item.MaxQuantity</td>
+                <td class="@statusClass">@statusText</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

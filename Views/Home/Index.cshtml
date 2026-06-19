@@ -1,0 +1,93 @@
+@model IEnumerable<MeuErp.Models.Product>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center mb-4 mt-4">
+    <h1 class="display-4 fw-bold text-primary">Visão Geral do Estoque</h1>
+</div>
+
+<div class="row text-center mb-5">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title text-uppercase fw-bold">Total de Produtos</h5>
+                <p class="card-text display-4 fw-bold">@ViewBag.TotalProducts</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger mb-3 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title text-uppercase fw-bold">Estoque Baixo</h5>
+                <p class="card-text display-4 fw-bold">@ViewBag.LowStock</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="card-title text-uppercase fw-bold">Estoque Alto</h5>
+                <p class="card-text display-4 fw-bold">@ViewBag.HighStock</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h3 class="card-title text-secondary">Produtos Críticos</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach(var item in Model.Where(p => p.Quantity < p.MinQuantity || p.Quantity > p.MaxQuantity).Take(5))
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span class="fw-medium">@item.Name</span>
+                            <span>
+                                @if(item.Quantity < item.MinQuantity) { <span class="badge bg-danger rounded-pill px-3 py-2">Abaixo do mín (@item.Quantity/@item.MinQuantity)</span> }
+                                @if(item.Quantity > item.MaxQuantity) { <span class="badge bg-warning rounded-pill px-3 py-2 text-dark">Acima do máx (@item.Quantity/@item.MaxQuantity)</span> }
+                            </span>
+                        </li>
+                    }
+                    @if(!Model.Any(p => p.Quantity < p.MinQuantity || p.Quantity > p.MaxQuantity)) {
+                        <li class="list-group-item px-0 text-muted">Todos os produtos estão dentro dos níveis ideais.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h3 class="card-title text-secondary">Últimas Movimentações</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @foreach(var move in ViewBag.RecentMovements)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <div>
+                                <strong class="d-block text-dark">@move.Product.Name</strong>
+                                <small class="text-muted">@move.MovementDate.ToString("dd/MM/yyyy HH:mm")</small>
+                            </div>
+                            <span>
+                                @if(move.Type == MeuErp.Models.MovementType.Entry) {
+                                    <span class="text-success fw-bold fs-5">+@move.Quantity</span>
+                                } else {
+                                    <span class="text-danger fw-bold fs-5">-@move.Quantity</span>
+                                }
+                            </span>
+                        </li>
+                    }
+                    @if(ViewBag.RecentMovements.Count == 0) {
+                        <li class="list-group-item px-0 text-muted">Nenhuma movimentação registrada.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
