@@ -1,45 +1,55 @@
 @model MeuErp.Models.StockMovement
-
 @{
     ViewData["Title"] = "Editar Movimentação";
 }
 
-<h1>Editar Movimentação</h1>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="mb-3">
-                <label asp-for="ProductId" class="form-label">Produto</label>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
-                <span asp-validation-for="ProductId" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Type" class="form-label"></label>
-                <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<MeuErp.Models.MovementType>()"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Quantity" class="form-label"></label>
-                <input asp-for="Quantity" type="number" class="form-control" min="1" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="MovementDate" class="form-label"></label>
-                <input asp-for="MovementDate" class="form-control" />
-                <span asp-validation-for="MovementDate" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+<div class="mb-4">
+    <h1 class="page-title text-center">Editar Movimentação</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card p-4">
+            <h2 class="fs-4 text-white mb-4 fw-bold text-center">Editar Detalhes</h2>
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-3 fs-6" style="display:none;"></div>
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="mb-3">
+                    <label asp-for="ProductId" class="form-label">Produto</label>
+                    <select asp-for="ProductId" class="form-select" asp-items="ViewBag.ProductId"></select>
+                    <span asp-validation-for="ProductId" class="text-danger fs-6 mt-1 d-block"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Type" class="form-label">Tipo de Movimento</label>
+                    <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<MeuErp.Models.MovementType>()"></select>
+                    <span asp-validation-for="Type" class="text-danger fs-6 mt-1 d-block"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Quantity" class="form-label">Quantidade</label>
+                    <input asp-for="Quantity" type="number" class="form-control" min="1" />
+                    <span asp-validation-for="Quantity" class="text-danger fs-6 mt-1 d-block"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="MovementDate" class="form-label">Data e Hora</label>
+                    <input asp-for="MovementDate" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="MovementDate" class="text-danger fs-6 mt-1 d-block"></span>
+                </div>
+                
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label">Observações</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger fs-6 mt-1 d-block"></span>
+                </div>
+                
+                <div class="d-flex gap-3 justify-content-end mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">Cancelar</a>
+                    <button type="submit" class="btn btn-primary px-4">Salvar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
