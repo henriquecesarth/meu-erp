@@ -30,7 +30,7 @@ body.login-body {
     position: relative;
 }
 
-/* Background Animated Blobs */
+/* Background Static Blobs (Otimizados para Performance) */
 .bg-blob {
     position: absolute;
     width: 300px;
@@ -39,7 +39,8 @@ body.login-body {
     filter: blur(80px);
     z-index: 1;
     opacity: 0.6;
-    animation: blob-float 10s infinite alternate;
+    transform: translate3d(0, 0, 0); /* Força renderização acelerada por hardware (GPU) */
+    will-change: transform;
 }
 
 .bg-blob-1 {
@@ -52,16 +53,6 @@ body.login-body {
     background: var(--accent-blue);
     bottom: -50px;
     right: -50px;
-    animation-delay: 5s;
-}
-
-@keyframes blob-float {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-    100% {
-        transform: translate(50px, 30px) scale(1.2);
-    }
 }
 
 /* Login Container */
@@ -83,7 +74,8 @@ body.login-body {
     padding: 40px 30px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
     animation: card-appear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    transform: translateY(20px);
+    transform: translateY(20px) translate3d(0, 0, 0); /* Aceleração por hardware (GPU) */
+    will-change: transform, opacity;
     opacity: 0;
 }
 
