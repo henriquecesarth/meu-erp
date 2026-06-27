@@ -29,6 +29,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="StockMovements" asp-action="Index">Movimentações</a>
                         </li>
                     </ul>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <ul class="navbar-nav align-items-center">
+                            <li class="nav-item me-3">
+                                <span class="text-secondary" style="font-size: 0.95rem;">
+                                    Olá, <strong class="text-dark">@(User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? User.Identity.Name)</strong>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" style="font-size: 0.85rem; font-weight: 500;">
+                                        Sair
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>

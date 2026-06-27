@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using MeuErp.Data;
 using MeuErp.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace MeuErp.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;

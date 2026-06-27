@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MeuErp.Data;
 using MeuErp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeuErp.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
