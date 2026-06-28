@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MeuErp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MeuErp.Models;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configura os cabeçalhos encaminhados pelo proxy (Render, Nginx, etc.)
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 // Configura a autenticação por Cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -21,6 +30,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 var app = builder.Build();
+
+// Habilita leitura dos cabeçalhos encaminhados pelo proxy de borda
+app.UseForwardedHeaders();
 
 // Aplica migrações pendentes e popula banco de dados com usuário inicial se necessário
 using (var scope = app.Services.CreateScope())
